@@ -652,7 +652,7 @@ footer {
         const contactForm = document.getElementById('contactForm');
         if (contactForm) {
             // Update the form to work with Formspree
-            contactForm.setAttribute('action', 'https://formspree.io/f/YOUR_FORMSPREE_ID');
+            contactForm.setAttribute('action', 'https://formspree.io/f/mnngvglj');
             contactForm.setAttribute('method', 'POST');
             
             // Add name attributes to inputs (required for Formspree)
