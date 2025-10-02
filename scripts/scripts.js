@@ -617,3 +617,93 @@ footer {
         padding: 10px 20px;
     }
 }
+
+    // Mobile Menu Toggle
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuBtn = document.querySelector('.menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        if (menuBtn && navLinks) {
+            menuBtn.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+            });
+        }
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    
+                    // Close mobile menu if open
+                    if (navLinks && navLinks.classList.contains('active')) {
+                        navLinks.classList.remove('active');
+                    }
+                }
+            });
+        });
+        
+        // Contact Form Handling with Formspree
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            // Update the form to work with Formspree
+            contactForm.setAttribute('action', 'https://formspree.io/f/YOUR_FORMSPREE_ID');
+            contactForm.setAttribute('method', 'POST');
+            
+            // Add name attributes to inputs (required for Formspree)
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email'); 
+            const subjectInput = document.getElementById('subject');
+            const messageInput = document.getElementById('message');
+            
+            if (nameInput) nameInput.setAttribute('name', 'name');
+            if (emailInput) emailInput.setAttribute('name', 'email');
+            if (subjectInput) subjectInput.setAttribute('name', 'subject');
+            if (messageInput) messageInput.setAttribute('name', 'message');
+            
+            // Form submission handler
+            contactForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const submitBtn = contactForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                
+                // Show loading state
+                submitBtn.textContent = 'Sending...';
+                submitBtn.disabled = true;
+                
+                try {
+                    const formData = new FormData(contactForm);
+                    const response = await fetch(contactForm.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        // Success message
+                        alert('Thank you! Your message has been sent successfully.');
+                        contactForm.reset();
+                    } else {
+                        throw new Error('Form submission failed');
+                    }
+                } catch (error) {
+                    // Error message
+                    alert('Sorry, there was an error sending your message. Please try again or email me directly.');
+                } finally {
+                    // Reset button
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }
+            });
+        }
+        
+        // Add any other JavaScript functionality you need here
+    });
